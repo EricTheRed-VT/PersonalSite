@@ -1,37 +1,52 @@
 'use strict'
 
+//enable babel in node
+require('babel-register');
+
 import path from 'path';
 import express from 'express';
 import bodyParser from 'body-parser';
-import pkg from '../index.js';
+import volleyball from 'volleyball';
+import apiRouter from './api';
 
 const app = express()
 
-app.use(require('volleyball'))
-
-module.exports = app
   // Body parsing middleware
   .use(bodyParser.urlencoded({
     extended: true
   }))
   .use(bodyParser.json())
 
+  //logging middleware
+  .use(volleyball)
+
   // Serve static files
   .use(express.static(resolve(__dirname, '../browser/public')))
 
   // Serve our api
-  .use('/api', require('./api'))
+  .use('/api', apiRouter)
 
+  //serve github repository page
   .get('/github', (req, res, next) => res.redirect('https://github.com/EricTheRed-VT/PersonalSite'))
 
   // Send index.html for anything else.
-  .get('/*', (_, res) => res.sendFile(resolve(__dirname, '../browser/public', 'index.html')))
+  .get('/*', (req, res, next) => res.sendFile(resolve(__dirname, '../browser/public', 'index.html')))
 
+  //error handling
+  .use((err, req, res, next) => {
+    console.error(err, typeof next);
+    console.error(err.stack);
+    res.status(err.status || 500).send(err.message || 'Internal server error.');
+  });
+
+const port = process.env.PORT || 1337;
 
 const server = app.listen(
-  process.env.PORT || 1337,
+  port,
   () => {
-    console.log(`--- Started HTTP Server---`)
-    console.log(`Listening on ${JSON.stringify(server.address())}`)
+    console.log(`--- Started HTTP Server---`);
+    console.log(`Listening on port ${port}`);
   }
 )
+
+export default app;
