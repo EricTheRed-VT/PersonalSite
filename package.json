@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha --compilers js:babel-register --watch browser/**/*.test.js browser/**/*.test.jsx server/**/*.test.js",
     "build": "webpack -w",
-    "start": "nodemon server/server.js --exec babel-node --presets es2015,stage-2",
+    "start": "nodemon server/index.js --exec babel-node --presets es2015,stage-2",
     "seed": "node server/db/seed.js"
   },
   "repository": {
