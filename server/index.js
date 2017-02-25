@@ -2,5 +2,5 @@
 
 //enable babel in node
 require('babel-register');
-require('./server.js');
+require('./server');
 

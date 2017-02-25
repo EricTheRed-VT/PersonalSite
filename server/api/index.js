@@ -1,7 +1,7 @@
 'use strict'
 
 import db from '../db';
-import exampleSubRouter from './exampleSubRouter'
+// import exampleSubRouter from './exampleSubRouter'
 import { Router } from 'express';
 
 const api = Router()
@@ -12,7 +12,9 @@ const api = Router()
   }))
 
   //subrouters
-  .use('/example', exampleSubRouter)
+  // .use('/example', exampleSubRouter)
 
   // No routes matched? 404.
   .use((req, res) => res.status(404).send())
+
+export default api;
